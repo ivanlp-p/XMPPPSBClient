@@ -44,6 +44,8 @@ public class OpenfireConnection implements ConnectionListener {
     private Roster roster;
     private BroadcastReceiver uiThreadMessageReceiver;
 
+    public static ConnectionState connectionState;
+
     public enum ConnectionState {
         CONNECTED, AUTHENTICATED, CONNECTING, DISCONNECTING, DISCONNECTED
     }
@@ -203,14 +205,15 @@ public class OpenfireConnection implements ConnectionListener {
     @Override
     public void connected(XMPPConnection connection) {
         OpenfireService.connectionState = ConnectionState.CONNECTED;
+        connectionState = ConnectionState.CONNECTED;
         Log.d(TAG, "Connected Successfully");
     }
 
     @Override
     public void authenticated(XMPPConnection connection, boolean resumed) {
         OpenfireService.connectionState = ConnectionState.CONNECTED;
+        connectionState = ConnectionState.AUTHENTICATED;
         Log.d(TAG, "Authenticated Successfully");
-       // showContactListActivityWhenAuthenticated();
     }
 
     @Override

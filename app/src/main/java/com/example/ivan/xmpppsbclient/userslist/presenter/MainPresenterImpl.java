@@ -16,7 +16,6 @@ import com.example.ivan.xmpppsbclient.xmpp.OpenfireConnection;
 
 import org.jivesoftware.smack.roster.RosterGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -48,39 +47,21 @@ public class MainPresenterImpl extends MvpPresenter<MainView> {
     public void getAccess() {
 
         if (storIOForUsersGroup.loadUsersGroupFromDb().size() != 0) {
-            List<RosterGroupDecorator> dbUserGroups = storIOForUsersGroup.loadUsersGroupFromDb();
+            List<RosterGroupDecorator> dbUsersGroups = storIOForUsersGroup.loadUsersGroupFromDb();
 
-            getViewState().showUserList(dbUserGroups);
+            getViewState().showUserList(dbUsersGroups);
 
         }
-        connectThread.start();
+
+        if (OpenfireConnection.connectionState != OpenfireConnection.ConnectionState.CONNECTED)
+            connectThread.start();
     }
 
 
     public void getUserList() {
-        List<RosterGroupDecorator> usersGroup = new ArrayList<>();
 
-        while (connection.getUsersGroup().size() == 0) {
-
-        }
-        List<RosterGroup> rosterGroups = connection.getUsersGroup();
-
-        int id = 1;
-
-        for (RosterGroup rosterGroup : rosterGroups) {
-
-
-            RosterGroupDecorator rosterGroupDecorator =
-                    new RosterGroupDecorator(id, rosterGroup.getName(), rosterGroup.getEntries());
-
-            usersGroup.add(rosterGroupDecorator);
-
-            id++;
-//            if (rosterGroup.getName().equals(storIOForUsersGroup.loadUsersGroupFromDb().get(0).ge))
-            storIOForUsersGroup.addUsersGroup(rosterGroupDecorator);
-        }
-
-        getViewState().showUserList(usersGroup);
+        List<RosterGroupDecorator> updatedUsersGroup = storIOForUsersGroup.loadUsersGroupFromDb();
+        getViewState().showUserList(updatedUsersGroup);
     }
 
     public void getChatWithUser(String userJid, String userName) {
@@ -104,8 +85,36 @@ public class MainPresenterImpl extends MvpPresenter<MainView> {
         public void run() {
             Looper.prepare();
 
-
             if (connection.connectToOpenfire(prefsHelper.getLogin(), prefsHelper.getPassword())) {
+
+                while (connection.getUsersGroup().size() == 0) {
+
+                }
+                List<RosterGroup> rosterGroups = connection.getUsersGroup();
+
+                int id;
+
+                for (RosterGroup rosterGroup : rosterGroups) {
+
+                    RosterGroupDecorator rosterGroupDecorator;
+
+                    if (!storIOForUsersGroup.searchUsersGroupByName(rosterGroup.getName())) {
+
+                        id = storIOForUsersGroup.getUsersGroupMaxId() + 1;
+                        rosterGroupDecorator = new RosterGroupDecorator(id, rosterGroup.getName(), rosterGroup.getEntries());
+                        storIOForUsersGroup.addUsersGroup(rosterGroupDecorator);
+
+                    } else if (storIOForUsersGroup.searchUsersGroupByName(rosterGroup.getName()) &&
+                            storIOForUsersGroup.loadUsersGroupByName(rosterGroup.getName()).getChildList().size() != rosterGroup.getEntries().size()) {
+
+                        id = storIOForUsersGroup.loadUsersGroupByName(rosterGroup.getName()).getId();
+
+                        rosterGroupDecorator = new RosterGroupDecorator(id, rosterGroup.getName(), rosterGroup.getEntries());
+
+                        storIOForUsersGroup.addUsersGroup(rosterGroupDecorator);
+                    }
+                }
+
                 msg = handler.obtainMessage(STATUS_CONNECTED);
                 handler.sendMessage(msg);
             }

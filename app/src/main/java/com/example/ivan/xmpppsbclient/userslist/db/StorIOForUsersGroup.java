@@ -33,15 +33,84 @@ public class StorIOForUsersGroup {
                 .executeAsBlocking();
     }
 
+    public void deleteUsersGroup(RosterGroupDecorator rosterGroupDecorator) {
+        defaultStorIOSQLite
+                .delete()
+                .object(rosterGroupDecorator)
+                .prepare()
+                .executeAsBlocking();
+    }
+
     public List<RosterGroupDecorator> loadUsersGroupFromDb() {
         return defaultStorIOSQLite
                 .get()
                 .listOfObjects(RosterGroupDecorator.class)
                 .withQuery(
                         Query.builder()
-                            .table(UsersListTable.TABLE_USERS_LIST)
-                            .build())
+                                .table(UsersListTable.TABLE_USERS_LIST)
+                                .build())
                 .prepare()
                 .executeAsBlocking();
     }
+
+    public RosterGroupDecorator loadUsersGroupByName(String groupName) {
+        RosterGroupDecorator rosterGroupDecorator = defaultStorIOSQLite
+                .get()
+                .object(RosterGroupDecorator.class)
+                .withQuery(Query.builder()
+                        .table(UsersListTable.TABLE_USERS_LIST)
+                        .where(UsersListTable.COLUMN_USERGROUP_NAME + " = ?")
+                        .whereArgs(groupName)
+                        .build())
+                .prepare()
+                .executeAsBlocking();
+
+        return rosterGroupDecorator;
+    }
+
+    public boolean searchUsersGroupByName(String groupName) {
+        RosterGroupDecorator rosterGroupDecorator = defaultStorIOSQLite
+                .get()
+                .object(RosterGroupDecorator.class)
+                .withQuery(Query.builder()
+                        .table(UsersListTable.TABLE_USERS_LIST)
+                        .where(UsersListTable.COLUMN_USERGROUP_NAME + " = ?")
+                        .whereArgs(groupName)
+                        .build())
+                .prepare()
+                .executeAsBlocking();
+
+        if (rosterGroupDecorator != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int getUsersGroupMaxId() {
+        RosterGroupDecorator rosterGroupDecorator = defaultStorIOSQLite
+                .get()
+                .object(RosterGroupDecorator.class)
+                .withQuery(Query.builder()
+                        .table(UsersListTable.TABLE_USERS_LIST)
+                        .orderBy(UsersListTable.COLUMN_ID + " DESC")
+                        .build())
+                .prepare()
+                .executeAsBlocking();
+
+        if (rosterGroupDecorator != null) {
+            return rosterGroupDecorator.getId();
+        } else {
+            return 0;
+        }
+    }
+
+    /*public void updateUsersInGroup(String groupName, RosterEntryDecorator entry) {
+        defaultStorIOSQLite
+                .lowLevel()
+                .update(UpdateQuery.builder()
+                        .table(UsersListTable.TABLE_USERS_LIST)
+                        .where())
+
+    }*/
 }
