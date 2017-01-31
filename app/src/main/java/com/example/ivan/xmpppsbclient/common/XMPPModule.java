@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.example.ivan.xmpppsbclient.db.DbOpenHelper;
+import com.example.ivan.xmpppsbclient.userslist.db.StorIOForUsersGroup;
 import com.example.ivan.xmpppsbclient.utils.SharedPreferencesHelper;
 import com.example.ivan.xmpppsbclient.xmpp.OpenfireConnection;
 
@@ -35,5 +37,17 @@ public class XMPPModule {
     @Singleton
     public SharedPreferencesHelper provideSharedPreferencesHelper(SharedPreferences preferences) {
         return new SharedPreferencesHelper(preferences);
+    }
+
+    @Provides
+    @Singleton
+    public DbOpenHelper provideDbOpenHelper(Context context) {
+        return new DbOpenHelper(context);
+    }
+
+    @Provides
+    @Singleton
+    public StorIOForUsersGroup provideStorIOForUsersGroup(DbOpenHelper dbOpenHelper) {
+        return new StorIOForUsersGroup(dbOpenHelper);
     }
 }

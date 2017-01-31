@@ -4,9 +4,11 @@ import android.os.Handler;
 
 import android.util.Log;
 
+import com.arellomobile.mvp.InjectViewState;
+import com.arellomobile.mvp.MvpPresenter;
 import com.example.ivan.xmpppsbclient.chat.view.ChatView;
+import com.example.ivan.xmpppsbclient.common.XMPPPSBApplication;
 import com.example.ivan.xmpppsbclient.xmpp.OpenfireConnection;
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.chat.Chat;
@@ -20,22 +22,21 @@ import javax.inject.Inject;
  * Created by I.Laukhin on 21.01.2017.
  */
 
-public class ChatPresenteImpl
-        extends MvpBasePresenter<ChatView>
-        implements ChatPresenter
+@InjectViewState
+public class ChatPresenterImpl extends MvpPresenter<ChatView>
 {
-    private static final String TAG = "ChatPresenteImpl";
+    private static final String TAG = "ChatPresenterImpl";
 
-    private OpenfireConnection connection;
+    @Inject
+    OpenfireConnection connection;
+
     private ChatManager chatManager;
     private Chat newChat;
 
-    @Inject
-    public ChatPresenteImpl(OpenfireConnection connection) {
-        this.connection = connection;
+    public ChatPresenterImpl() {
+        XMPPPSBApplication.component().inject(this);
     }
 
-    @Override
     public void getChatWithUser(String user) {
         chatManager = connection.createChatManager();
 
@@ -51,11 +52,10 @@ public class ChatPresenteImpl
         });
     }
 
-    @Override
     public void sendMessage(String message) {
         try {
             newChat.sendMessage(message);
-            getView().showSendingMessage(message);
+            getViewState().showSendingMessage(message);
         } catch (SmackException.NotConnectedException e) {
             e.printStackTrace();
         }
@@ -65,7 +65,7 @@ public class ChatPresenteImpl
         @Override
         public void handleMessage(android.os.Message msg) {
             Message message = (Message) msg.obj;
-            getView().showIncomingMessage(message.getBody());
+            getViewState().showIncomingMessage(message.getBody());
         }
     };
 }

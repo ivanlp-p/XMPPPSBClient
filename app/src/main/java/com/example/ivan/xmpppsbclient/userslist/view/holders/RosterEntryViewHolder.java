@@ -7,9 +7,8 @@ import android.widget.TextView;
 
 import com.bignerdranch.expandablerecyclerview.ChildViewHolder;
 import com.example.ivan.xmpppsbclient.R;
+import com.example.ivan.xmpppsbclient.enrities.RosterEntryDecorator;
 import com.example.ivan.xmpppsbclient.userslist.view.RecyclerItemClickListener;
-
-import org.jivesoftware.smack.roster.RosterEntry;
 
 /**
  * Created by I.Laukhin on 23.01.2017.
@@ -45,7 +44,7 @@ public class RosterEntryViewHolder extends ChildViewHolder implements View.OnCli
         this.recyclerItemClickListener = recyclerItemClickListener;
     }
 
-    public void bind(@NonNull RosterEntry rosterEntry) {
+    public void bind(@NonNull RosterEntryDecorator rosterEntry) {
 
         userJid = rosterEntry.getUser();
         userName = rosterEntry.getName();

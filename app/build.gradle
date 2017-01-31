@@ -49,29 +49,38 @@ android {
     }
 }
 
+def support = '25.1.1'
+def smack = '4.1.0'
+def storio = '1.11.0'
+def dagger = '2.5'
+def moxy = '1.4.5'
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar','**/*.aar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile 'com.android.support:support-v4:25.1.0'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
-    compile 'com.android.support:cardview-v7:25.1.0'
+    compile "com.android.support:support-v4:$support"
+    compile "com.android.support:appcompat-v7:$support"
+    compile "com.android.support:design:$support"
+    compile "com.android.support:recyclerview-v7:$support"
+    compile "com.android.support:cardview-v7:$support"
 
     apt 'com.android.databinding:compiler:1.0-rc5'
 
-    // Mosby
-    compile 'com.hannesdorfmann.mosby:mvp:2.0.1'
-    compile 'com.hannesdorfmann.mosby:viewstate:2.0.1'
+    // Moxy
+    compile "com.arello-mobile:moxy:$moxy"
+    compile "com.arello-mobile:moxy-android:$moxy"
+    compile "com.arello-mobile:moxy-app-compat:$moxy"
+    provided "com.arello-mobile:moxy-compiler:$moxy"
+    annotationProcessor "com.arello-mobile:moxy-compiler:$moxy"
 
     // Smack
-    compile "org.igniterealtime.smack:smack-android:4.1.0"
-    compile "org.igniterealtime.smack:smack-android-extensions:4.1.0"
-    compile "org.igniterealtime.smack:smack-experimental:4.1.0"
-    compile "org.igniterealtime.smack:smack-tcp:4.1.0"
+    compile "org.igniterealtime.smack:smack-android:$smack"
+    compile "org.igniterealtime.smack:smack-android-extensions:$smack"
+    compile "org.igniterealtime.smack:smack-experimental:$smack"
+    compile "org.igniterealtime.smack:smack-tcp:$smack"
 
     //  Picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -80,12 +89,13 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
 
     //Процессор аннотаций для StorIO
-    compile 'com.pushtorefresh.storio:sqlite:1.9.1'
-    compile 'com.pushtorefresh.storio:sqlite-annotations:1.9.1'
+    apt "com.pushtorefresh.storio:sqlite-annotations-processor:$storio"
+    compile "com.pushtorefresh.storio:sqlite:$storio"
+    compile "com.pushtorefresh.storio:sqlite-annotations:$storio"
 
     // Dagger2
-    apt 'com.google.dagger:dagger-compiler:2.5'
-    compile 'com.google.dagger:dagger:2.5'
+    apt "com.google.dagger:dagger-compiler:$dagger"
+    compile "com.google.dagger:dagger:$dagger"
     provided 'javax.annotation:jsr250-api:1.0'
 
     // JodaTime

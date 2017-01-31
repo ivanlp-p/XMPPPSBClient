@@ -9,11 +9,10 @@ import android.view.ViewGroup;
 
 import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter;
 import com.example.ivan.xmpppsbclient.R;
+import com.example.ivan.xmpppsbclient.enrities.RosterEntryDecorator;
 import com.example.ivan.xmpppsbclient.enrities.RosterGroupDecorator;
 import com.example.ivan.xmpppsbclient.userslist.view.holders.RosterEntryViewHolder;
 import com.example.ivan.xmpppsbclient.userslist.view.holders.RosterGroupViewHolder;
-
-import org.jivesoftware.smack.roster.RosterEntry;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ import java.util.List;
  * Created by I.Laukhin on 22.01.2017.
  */
 
-public class UserListAdapter extends ExpandableRecyclerAdapter<RosterGroupDecorator, RosterEntry, RosterGroupViewHolder, RosterEntryViewHolder>{
+public class UserListAdapter extends ExpandableRecyclerAdapter<RosterGroupDecorator, RosterEntryDecorator, RosterGroupViewHolder, RosterEntryViewHolder>{
 
     private static final String TAG = "UserListAdapter";
 
@@ -69,7 +68,7 @@ public class UserListAdapter extends ExpandableRecyclerAdapter<RosterGroupDecora
     }
 
     @Override
-    public void onBindChildViewHolder(@NonNull RosterEntryViewHolder rosterEntryViewHolder, int parentPosition, int childPosition, @NonNull RosterEntry child) {
+    public void onBindChildViewHolder(@NonNull RosterEntryViewHolder rosterEntryViewHolder, int parentPosition, int childPosition, @NonNull RosterEntryDecorator child) {
         Log.d(TAG, "onBindChildViewHolder");
 
         rosterEntryViewHolder.bind(child);

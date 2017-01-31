@@ -35,7 +35,7 @@ import java.util.List;
 public class OpenfireConnection implements ConnectionListener {
 
     private static final String TAG = "OpenfireConnection";
-    private static final String IP_ADDRESS = "192.168.0.46";
+    private static final String IP_ADDRESS = "192.168.1.35"; //192.168.1.35   192.168.0.46    192.168.1.186
     private static final int PORT = 5222;
 
     private Context context;
@@ -175,6 +175,10 @@ public class OpenfireConnection implements ConnectionListener {
         roster = Roster.getInstanceFor(connection);
 
         return roster.getPresence(user);
+    }
+
+    public boolean isAuthenticated() {
+        return connection.isConnected();
     }
 
     public ChatManager createChatManager() {
