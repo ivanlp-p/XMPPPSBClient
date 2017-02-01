@@ -5,14 +5,12 @@ import android.app.Application;
 import com.example.ivan.xmpppsbclient.chat.presenter.ChatPresenterImpl;
 import com.example.ivan.xmpppsbclient.login.presenter.LoginPresenterImpl;
 import com.example.ivan.xmpppsbclient.userslist.presenter.MainPresenterImpl;
+import com.example.ivan.xmpppsbclient.userslist.view.UserListAdapter;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
 
-/**
- * Created by I.Laukhin on 21.01.2017.
- */
 
 public class XMPPPSBApplication extends Application {
 
@@ -26,6 +24,7 @@ public class XMPPPSBApplication extends Application {
         void inject(LoginPresenterImpl loginPresenter);
         void inject(MainPresenterImpl mainPresenter);
         void inject(ChatPresenterImpl chatPresenter);
+        void inject(UserListAdapter adapter);
     }
 
     @Override

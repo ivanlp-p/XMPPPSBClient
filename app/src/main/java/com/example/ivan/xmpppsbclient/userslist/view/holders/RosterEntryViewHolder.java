@@ -10,9 +10,8 @@ import com.example.ivan.xmpppsbclient.R;
 import com.example.ivan.xmpppsbclient.enrities.RosterEntryDecorator;
 import com.example.ivan.xmpppsbclient.userslist.view.RecyclerItemClickListener;
 
-/**
- * Created by I.Laukhin on 23.01.2017.
- */
+import org.jivesoftware.smack.packet.Presence;
+
 
 public class RosterEntryViewHolder extends ChildViewHolder implements View.OnClickListener {
 
@@ -44,14 +43,25 @@ public class RosterEntryViewHolder extends ChildViewHolder implements View.OnCli
         this.recyclerItemClickListener = recyclerItemClickListener;
     }
 
-    public void bind(@NonNull RosterEntryDecorator rosterEntry) {
+    public void bind(@NonNull RosterEntryDecorator rosterEntry, Presence presence) {
 
         userJid = rosterEntry.getUser();
         userName = rosterEntry.getName();
 
-        cardUserImage.setText(String.valueOf(rosterEntry.getName().charAt(0)).toUpperCase());
-        cardUsesrName.setText(userName);
-//        cardUserStatus.setText(rosterEntry.getStatus().toString());
+        if (presence != null) {
+            cardUserImage.setText(String.valueOf(rosterEntry.getName().charAt(0)).toUpperCase());
+            cardUsesrName.setText(userName);
+            cardUserStatus.setText(presence.getStatus());
+            if (!presence.isAvailable()) {
+                cardUserPresence.setBackgroundResource(R.drawable.circle_textview_offline);
+            } else {
+                cardUserPresence.setBackgroundResource(R.drawable.circle_textview_online);
+            }
+        } else {
+            cardUserImage.setText(String.valueOf(rosterEntry.getName().charAt(0)).toUpperCase());
+            cardUsesrName.setText(userName);
+            cardUserPresence.setBackgroundResource(R.drawable.circle_textview_offline);
+        }
     }
 
 

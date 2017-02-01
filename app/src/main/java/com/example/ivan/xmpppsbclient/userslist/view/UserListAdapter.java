@@ -9,20 +9,26 @@ import android.view.ViewGroup;
 
 import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter;
 import com.example.ivan.xmpppsbclient.R;
+import com.example.ivan.xmpppsbclient.common.XMPPPSBApplication;
 import com.example.ivan.xmpppsbclient.enrities.RosterEntryDecorator;
 import com.example.ivan.xmpppsbclient.enrities.RosterGroupDecorator;
 import com.example.ivan.xmpppsbclient.userslist.view.holders.RosterEntryViewHolder;
 import com.example.ivan.xmpppsbclient.userslist.view.holders.RosterGroupViewHolder;
+import com.example.ivan.xmpppsbclient.xmpp.OpenfireConnection;
+
+import org.jivesoftware.smack.packet.Presence;
 
 import java.util.List;
 
-/**
- * Created by I.Laukhin on 22.01.2017.
- */
+import javax.inject.Inject;
+
 
 public class UserListAdapter extends ExpandableRecyclerAdapter<RosterGroupDecorator, RosterEntryDecorator, RosterGroupViewHolder, RosterEntryViewHolder>{
 
     private static final String TAG = "UserListAdapter";
+
+    @Inject
+    OpenfireConnection connection;
 
     private List<RosterGroupDecorator> rosterGroups;
     private LayoutInflater inflater;
@@ -32,6 +38,7 @@ public class UserListAdapter extends ExpandableRecyclerAdapter<RosterGroupDecora
         super(rosterGroups);
         this.rosterGroups = rosterGroups;
         inflater = LayoutInflater.from(context);
+        XMPPPSBApplication.component().inject(this);
     }
 
     void setRecyclerItemClickListener(RecyclerItemClickListener recyclerItemClickListener) {
@@ -70,7 +77,7 @@ public class UserListAdapter extends ExpandableRecyclerAdapter<RosterGroupDecora
     @Override
     public void onBindChildViewHolder(@NonNull RosterEntryViewHolder rosterEntryViewHolder, int parentPosition, int childPosition, @NonNull RosterEntryDecorator child) {
         Log.d(TAG, "onBindChildViewHolder");
-
-        rosterEntryViewHolder.bind(child);
+        Presence presence = connection.getUserPresence(child.getUser());
+        rosterEntryViewHolder.bind(child, presence);
     }
 }

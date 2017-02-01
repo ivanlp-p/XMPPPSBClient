@@ -20,9 +20,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-/**
- * Created by I.Laukhin on 21.01.2017.
- */
 
 @InjectViewState
 public class MainPresenterImpl extends MvpPresenter<MainView> {
@@ -53,7 +50,7 @@ public class MainPresenterImpl extends MvpPresenter<MainView> {
 
         }
 
-        if (OpenfireConnection.connectionState != OpenfireConnection.ConnectionState.CONNECTED)
+        if (!connection.isAuthenticated())
             connectThread.start();
     }
 
