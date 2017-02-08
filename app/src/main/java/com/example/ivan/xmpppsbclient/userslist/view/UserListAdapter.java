@@ -77,7 +77,14 @@ public class UserListAdapter extends ExpandableRecyclerAdapter<RosterGroupDecora
     @Override
     public void onBindChildViewHolder(@NonNull RosterEntryViewHolder rosterEntryViewHolder, int parentPosition, int childPosition, @NonNull RosterEntryDecorator child) {
         Log.d(TAG, "onBindChildViewHolder");
-        Presence presence = connection.getUserPresence(child.getUser());
-        rosterEntryViewHolder.bind(child, presence);
+        if (connection.getUserPresence(child.getUserJid()) != null) {
+            Presence presence = connection.getUserPresence(child.getUserJid());
+            Log.d(TAG, "isAvailable " + presence.isAvailable());
+            rosterEntryViewHolder.bind(child, presence);
+        } else {
+            rosterEntryViewHolder.bind(child);
+        }
+
+
     }
 }

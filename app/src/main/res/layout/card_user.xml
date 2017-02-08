@@ -31,26 +31,44 @@
             android:background="@drawable/circle_textview_online"/>
 
         <TextView
-            android:id="@+id/card_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/card_tv_image"
-            android:layout_marginLeft="16dp"
+            android:id="@+id/card_new_msg"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/textview_new_messages"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="3"
+            android:gravity="center"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:textSize="25sp"
-            android:gravity="bottom"/>
+            android:textSize="22sp"/>
 
-        <TextView
-            android:id="@+id/card_status"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/card_tv_image"
-            android:layout_below="@+id/card_username"
-            android:layout_marginTop="4dp"
             android:layout_marginLeft="16dp"
-            android:textSize="16sp"
-            android:gravity="bottom"
-            android:lines="1"/>
+            android:layout_marginRight="4dp"
+            android:layout_toRightOf="@id/card_tv_image"
+            android:layout_toLeftOf="@id/card_new_msg">
+
+            <TextView
+                android:id="@+id/card_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:gravity="bottom"/>
+
+            <TextView
+                android:id="@+id/card_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card_username"
+                android:layout_marginTop="4dp"
+                android:textSize="16sp"
+                android:gravity="bottom"
+                android:lines="1"/>
+        </RelativeLayout>
 
     </RelativeLayout>
 

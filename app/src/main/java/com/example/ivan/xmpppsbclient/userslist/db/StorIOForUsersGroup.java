@@ -104,13 +104,4 @@ public class StorIOForUsersGroup {
             return 0;
         }
     }
-
-    /*public void updateUsersInGroup(String groupName, RosterEntryDecorator entry) {
-        defaultStorIOSQLite
-                .lowLevel()
-                .update(UpdateQuery.builder()
-                        .table(UsersListTable.TABLE_USERS_LIST)
-                        .where())
-
-    }*/
 }

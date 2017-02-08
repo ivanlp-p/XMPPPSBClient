@@ -28,6 +28,7 @@ public class MainActivity
     private static final String EXTRA_USER_NAME = "extra_user_name";
 
     private ActivityMainBinding binding;
+    private UserListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +52,10 @@ public class MainActivity
 
     @Override
     public void showUserList(List<RosterGroupDecorator> rosterGroups) {
-        UserListAdapter adapter = new UserListAdapter(this, rosterGroups);
+        adapter = new UserListAdapter(this, rosterGroups);
+        adapter.expandAllParents();
         binding.contactListRv.setLayoutManager(new LinearLayoutManager(this));
         binding.contactListRv.setAdapter(adapter);
-
         adapter.setRecyclerItemClickListener(this);
     }
 
@@ -67,7 +68,24 @@ public class MainActivity
     }
 
     @Override
+    public void updateUsersListWhenProcessNewChat(String userJid) {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onItemClickListener(String userJid, String userName) {
         mainPresenter.getChatWithUser(userJid, userName);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        adapter.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        adapter.onRestoreInstanceState(savedInstanceState);
     }
 }

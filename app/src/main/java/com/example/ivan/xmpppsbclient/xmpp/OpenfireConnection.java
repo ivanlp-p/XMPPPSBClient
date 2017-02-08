@@ -22,6 +22,7 @@ import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterGroup;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
+import org.jivesoftware.smackx.offline.OfflineMessageManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import java.util.List;
 public class OpenfireConnection implements ConnectionListener {
 
     private static final String TAG = "OpenfireConnection";
-    private static final String IP_ADDRESS = "192.168.0.46"; //192.168.1.35   192.168.0.46    192.168.1.186
+    private static final String IP_ADDRESS = "192.168.1.35"; //192.168.1.35   192.168.0.46    192.168.1.186
     private static final int PORT = 5222;
 
     private Context context;
@@ -67,7 +68,7 @@ public class OpenfireConnection implements ConnectionListener {
                 .setPort(PORT)
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                 .setResource("test")
-                .setSendPresence(true)
+                .setSendPresence(false)
                 .setDebuggerEnabled(true)
                 .build();
 
@@ -157,6 +158,10 @@ public class OpenfireConnection implements ConnectionListener {
         Log.d(TAG, "Received message from :" + contactId +" broadcast sent.");
     }*/
 
+    public Roster getRoster() {
+        return Roster.getInstanceFor(connection);
+    }
+
     public List<RosterGroup> getUsersGroup() {
         List<RosterGroup> groupList = new ArrayList<>();
 
@@ -171,9 +176,11 @@ public class OpenfireConnection implements ConnectionListener {
     }
 
     public Presence getUserPresence(String user) {
-        roster = Roster.getInstanceFor(connection);
+        if (connection != null) {
+            roster = Roster.getInstanceFor(connection);
 
-        return roster.getPresence(user);
+            return roster.getPresence(user);
+        } else return null;
     }
 
     public boolean isAuthenticated() {
@@ -185,8 +192,20 @@ public class OpenfireConnection implements ConnectionListener {
         }
     }
 
-    public ChatManager createChatManager() {
+    public ChatManager getChatManager() {
         return ChatManager.getInstanceFor(connection);
+    }
+
+    public OfflineMessageManager getOfflineMessageManager() {
+        return new OfflineMessageManager(connection);
+    }
+
+    public void sendPresence(Presence presence){
+        try {
+            connection.sendStanza(presence);
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void disconnect() {

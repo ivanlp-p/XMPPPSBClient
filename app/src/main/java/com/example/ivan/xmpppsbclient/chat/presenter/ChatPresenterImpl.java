@@ -38,7 +38,7 @@ public class ChatPresenterImpl extends MvpPresenter<ChatView>
     }
 
     public void getChatWithUser(String user) {
-        chatManager = connection.createChatManager();
+        chatManager = connection.getChatManager();
 
         newChat = chatManager.createChat(user, new ChatMessageListener() {
             @Override

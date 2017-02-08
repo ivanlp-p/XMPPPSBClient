@@ -25,6 +25,7 @@ public class RosterEntryViewHolder extends ChildViewHolder implements View.OnCli
     private TextView cardUserPresence;
     private TextView cardUsesrName;
     private TextView cardUserStatus;
+    private final TextView cardNewMsg;
 
     public RosterEntryViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -35,6 +36,7 @@ public class RosterEntryViewHolder extends ChildViewHolder implements View.OnCli
         cardUserPresence = (TextView) itemView.findViewById(R.id.card_presence);
         cardUsesrName = (TextView) itemView.findViewById(R.id.card_username);
         cardUserStatus = (TextView) itemView.findViewById(R.id.card_status);
+        cardNewMsg = (TextView) itemView.findViewById(R.id.card_new_msg);
 
         itemView.setOnClickListener(this);
     }
@@ -45,13 +47,24 @@ public class RosterEntryViewHolder extends ChildViewHolder implements View.OnCli
 
     public void bind(@NonNull RosterEntryDecorator rosterEntry, Presence presence) {
 
-        userJid = rosterEntry.getUser();
+        userJid = rosterEntry.getUserJid();
         userName = rosterEntry.getName();
 
         if (presence != null) {
             cardUserImage.setText(String.valueOf(rosterEntry.getName().charAt(0)).toUpperCase());
             cardUsesrName.setText(userName);
             cardUserStatus.setText(presence.getStatus());
+
+            Log.d(TAG, "New message = " + rosterEntry.getUnreadMeassageFromUser().size());
+            if (rosterEntry.getUnreadMeassageFromUser().size() == 0) {
+                cardNewMsg.setVisibility(View.GONE);
+            } else {
+                cardNewMsg.setVisibility(View.VISIBLE);
+                cardNewMsg.setText(String.valueOf(rosterEntry.getUnreadMeassageFromUser().size()));
+            }
+
+            Log.d(TAG, "isAvailable = " + presence.isAvailable());
+
             if (!presence.isAvailable()) {
                 cardUserPresence.setBackgroundResource(R.drawable.circle_textview_offline);
             } else {
@@ -61,6 +74,31 @@ public class RosterEntryViewHolder extends ChildViewHolder implements View.OnCli
             cardUserImage.setText(String.valueOf(rosterEntry.getName().charAt(0)).toUpperCase());
             cardUsesrName.setText(userName);
             cardUserPresence.setBackgroundResource(R.drawable.circle_textview_offline);
+            if (rosterEntry.getUnreadMeassageFromUser().size() == 0) {
+                cardNewMsg.setVisibility(View.GONE);
+            } else {
+                cardNewMsg.setVisibility(View.VISIBLE);
+                cardNewMsg.setText(String.valueOf(rosterEntry.getUnreadMeassageFromUser().size()));
+            }
+
+        }
+    }
+
+    public void bind(@NonNull RosterEntryDecorator rosterEntry) {
+        userJid = rosterEntry.getUserJid();
+        userName = rosterEntry.getName();
+
+        cardUserImage.setText(String.valueOf(rosterEntry.getName().charAt(0)).toUpperCase());
+        cardUsesrName.setText(userName);
+        cardUserPresence.setBackgroundResource(R.drawable.circle_textview_offline);
+        if (rosterEntry.getUnreadMeassageFromUser().size() == 0) {
+            cardNewMsg.setVisibility(View.GONE);
+        } else {
+            cardNewMsg.setVisibility(View.VISIBLE);
+            cardNewMsg.setText(String.valueOf(rosterEntry.getUnreadMeassageFromUser().size()));
+            for (String msg : rosterEntry.getUnreadMeassageFromUser()) {
+                Log.d(TAG, msg);
+            }
         }
     }
 

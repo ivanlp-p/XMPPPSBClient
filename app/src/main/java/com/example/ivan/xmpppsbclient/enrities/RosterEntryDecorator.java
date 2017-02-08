@@ -1,5 +1,7 @@
 package com.example.ivan.xmpppsbclient.enrities;
 
+import java.util.List;
+
 /**
  * Created by I.Laukhin on 27.01.2017.
  */
@@ -7,13 +9,18 @@ package com.example.ivan.xmpppsbclient.enrities;
 public class RosterEntryDecorator {
 
     private int id;
-    private String user;
+    private String userJid;
     private String name;
+    private List<String> unreadMeassageFromUser;
 
-    public RosterEntryDecorator(int id, String user, String name) {
+    public RosterEntryDecorator(int id,
+                                String userJid,
+                                String name,
+                                List<String> unreadMeassageFromUser) {
         this.id = id;
-        this.user = user;
+        this.userJid = userJid;
         this.name = name;
+        this.unreadMeassageFromUser = unreadMeassageFromUser;
     }
 
     public int getId() {
@@ -24,12 +31,12 @@ public class RosterEntryDecorator {
         this.id = id;
     }
 
-    public String getUser() {
-        return user;
+    public String getUserJid() {
+        return userJid;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUserJid(String userJid) {
+        this.userJid = userJid;
     }
 
     public String getName() {
@@ -38,5 +45,13 @@ public class RosterEntryDecorator {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<String> getUnreadMeassageFromUser() {
+        return unreadMeassageFromUser;
+    }
+
+    public void setUnreadMeassageFromUser(List<String> unreadMeassageFromUser) {
+        this.unreadMeassageFromUser = unreadMeassageFromUser;
     }
 }

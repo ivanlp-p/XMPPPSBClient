@@ -19,4 +19,6 @@ public interface MainView extends MvpView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showChatWithUser(String userJid, String userName);
+
+    void updateUsersListWhenProcessNewChat(String userJid);
 }

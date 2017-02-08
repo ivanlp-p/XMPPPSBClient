@@ -1,5 +1,7 @@
 package com.example.ivan.xmpppsbclient.enrities;
 
+import android.util.Log;
+
 import com.bignerdranch.expandablerecyclerview.model.Parent;
 import com.example.ivan.xmpppsbclient.userslist.db.UsersListTable;
 import com.example.ivan.xmpppsbclient.utils.SerializeHelper;
@@ -41,7 +43,7 @@ public class RosterGroupDecorator implements Parent<RosterEntryDecorator> {
         List<RosterEntryDecorator> userOfflineList = new ArrayList<>();
 
         for (int i = 0; i < rosterEntries.size(); i++) {
-            userOfflineList.add(new RosterEntryDecorator(i, rosterEntries.get(i).getUser(), rosterEntries.get(i).getName()));
+            userOfflineList.add(new RosterEntryDecorator(i, rosterEntries.get(i).getUser(), rosterEntries.get(i).getName(), new ArrayList<String>()));
         }
 
         rosterEntriesListString = serializeHelper.serializeWithGson(userOfflineList);
@@ -63,5 +65,31 @@ public class RosterGroupDecorator implements Parent<RosterEntryDecorator> {
     @Override
     public boolean isInitiallyExpanded() {
         return false;
+    }
+
+    public void updateNewMessagesFromUser(String userJid, List<String> newMessagesList) {
+        List<RosterEntryDecorator> rosterEntryList = SerializeHelper.getInstance().deserializeUsersGroup(rosterEntriesListString);
+
+        RosterEntryDecorator updateRosterEntry = null;
+
+        for (RosterEntryDecorator entry : rosterEntryList) {
+            if (entry.getUserJid().equals(userJid)) {
+                updateRosterEntry = entry;
+            }
+        }
+
+        if (updateRosterEntry != null) {
+            if (updateRosterEntry.getUnreadMeassageFromUser().size() != 0) {
+                List<String> updateNewMessagesList = updateRosterEntry.getUnreadMeassageFromUser();
+                updateNewMessagesList.addAll(newMessagesList);
+                updateRosterEntry.setUnreadMeassageFromUser(updateNewMessagesList);
+            } else {
+                updateRosterEntry.setUnreadMeassageFromUser(newMessagesList);
+            }
+        }
+
+        rosterEntriesListString = SerializeHelper.getInstance().serializeWithGson(rosterEntryList);
+
+        Log.d("RosterDec", "size = " + SerializeHelper.getInstance().deserializeUsersGroup(rosterEntriesListString).get(0).getUnreadMeassageFromUser().size());
     }
 }
