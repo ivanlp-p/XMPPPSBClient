@@ -1,12 +1,15 @@
 package com.example.ivan.xmpppsbclient.enrities;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by I.Laukhin on 27.01.2017.
  */
 
-public class RosterEntryDecorator {
+public class RosterEntryDecorator implements Serializable {
 
     private int id;
     private String userJid;

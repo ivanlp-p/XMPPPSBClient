@@ -18,8 +18,7 @@ public class RosterEntryViewHolder extends ChildViewHolder implements View.OnCli
     private static final String TAG = "RosterEntryViewHolder";
 
     private RecyclerItemClickListener recyclerItemClickListener;
-    private String userJid;
-    private String userName;
+    private RosterEntryDecorator contactRosterEntry;
 
     private TextView cardUserImage;
     private TextView cardUserPresence;
@@ -47,8 +46,8 @@ public class RosterEntryViewHolder extends ChildViewHolder implements View.OnCli
 
     public void bind(@NonNull RosterEntryDecorator rosterEntry, Presence presence) {
 
-        userJid = rosterEntry.getUserJid();
-        userName = rosterEntry.getName();
+        contactRosterEntry = rosterEntry;
+        String userName = rosterEntry.getName();
 
         if (presence != null) {
             cardUserImage.setText(String.valueOf(rosterEntry.getName().charAt(0)).toUpperCase());
@@ -85,8 +84,8 @@ public class RosterEntryViewHolder extends ChildViewHolder implements View.OnCli
     }
 
     public void bind(@NonNull RosterEntryDecorator rosterEntry) {
-        userJid = rosterEntry.getUserJid();
-        userName = rosterEntry.getName();
+        contactRosterEntry = rosterEntry;
+        String userName = rosterEntry.getName();
 
         cardUserImage.setText(String.valueOf(rosterEntry.getName().charAt(0)).toUpperCase());
         cardUsesrName.setText(userName);
@@ -107,7 +106,7 @@ public class RosterEntryViewHolder extends ChildViewHolder implements View.OnCli
     public void onClick(View view) {
         if (recyclerItemClickListener != null) {
             Log.d(TAG, "onClick");
-            recyclerItemClickListener.onItemClickListener(userJid, userName);
+            recyclerItemClickListener.onItemClickListener(contactRosterEntry);
         }
     }
 }

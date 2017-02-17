@@ -10,6 +10,7 @@ public class SharedPreferencesHelper {
 
     private static final String PREFERENCES_LOGIN = "preferences_login";
     private static final String PREFERENCES_PASSWORD = "preferences_password";
+    private static final String PREFERENCES_USERNAME = "preferences_username";
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -37,5 +38,14 @@ public class SharedPreferencesHelper {
     public String getPassword() {
 
         return preferences.getString(PREFERENCES_PASSWORD, "");
+    }
+
+    public void setUsername(String username) {
+        editor.putString(PREFERENCES_USERNAME, username);
+        editor.commit();
+    }
+
+    public String getUsername() {
+        return preferences.getString(PREFERENCES_USERNAME, "");
     }
 }

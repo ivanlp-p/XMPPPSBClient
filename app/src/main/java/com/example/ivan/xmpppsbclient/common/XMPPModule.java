@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.example.ivan.xmpppsbclient.chat.db.StorIOForMessages;
 import com.example.ivan.xmpppsbclient.db.DbOpenHelper;
 import com.example.ivan.xmpppsbclient.userslist.db.StorIOForUsersGroup;
 import com.example.ivan.xmpppsbclient.utils.SharedPreferencesHelper;
@@ -49,5 +50,11 @@ public class XMPPModule {
     @Singleton
     public StorIOForUsersGroup provideStorIOForUsersGroup(DbOpenHelper dbOpenHelper) {
         return new StorIOForUsersGroup(dbOpenHelper);
+    }
+
+    @Provides
+    @Singleton
+    public StorIOForMessages provideStorIOForMessages(DbOpenHelper dbOpenHelper) {
+        return new StorIOForMessages(dbOpenHelper);
     }
 }

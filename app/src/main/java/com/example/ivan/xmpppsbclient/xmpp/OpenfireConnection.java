@@ -23,6 +23,7 @@ import org.jivesoftware.smack.roster.RosterGroup;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.offline.OfflineMessageManager;
+import org.jivesoftware.smackx.vcardtemp.VCardManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ import java.util.List;
 public class OpenfireConnection implements ConnectionListener {
 
     private static final String TAG = "OpenfireConnection";
-    private static final String IP_ADDRESS = "192.168.1.35"; //192.168.1.35   192.168.0.46    192.168.1.186
+    private static final String IP_ADDRESS = "192.168.0.46"; //192.168.1.35   192.168.0.46    192.168.1.186
     private static final int PORT = 5222;
 
     private Context context;
@@ -181,6 +182,10 @@ public class OpenfireConnection implements ConnectionListener {
 
             return roster.getPresence(user);
         } else return null;
+    }
+
+    public VCardManager getVCardManager() {
+        return VCardManager.getInstanceFor(connection);
     }
 
     public boolean isAuthenticated() {

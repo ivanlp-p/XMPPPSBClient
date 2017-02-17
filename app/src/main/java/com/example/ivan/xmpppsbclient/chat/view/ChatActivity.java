@@ -2,7 +2,6 @@ package com.example.ivan.xmpppsbclient.chat.view;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,6 +10,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.example.ivan.xmpppsbclient.R;
 import com.example.ivan.xmpppsbclient.chat.presenter.ChatPresenterImpl;
 import com.example.ivan.xmpppsbclient.databinding.ActivityChatBinding;
+import com.example.ivan.xmpppsbclient.enrities.MessageDB;
+import com.example.ivan.xmpppsbclient.enrities.RosterEntryDecorator;
+
+import java.util.List;
 
 import jp.bassaer.chatmessageview.models.Message;
 import jp.bassaer.chatmessageview.models.User;
@@ -26,13 +29,11 @@ public class ChatActivity
     @InjectPresenter
     ChatPresenterImpl chatPresenter;
 
-    private static final String EXTRA_USER_ID = "extra_user_id";
-    private static final String EXTRA_USER_NAME = "extra_user_name";
+    private static final String EXTRA_CONTACT_ROSTER_ENTRY = "extra_contact_roster_entry";
 
     private ActivityChatBinding binding;
 
-    private User me;
-    private User you;
+    private RosterEntryDecorator contactRosterEntry;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,9 +42,6 @@ public class ChatActivity
         binding = DataBindingUtil.setContentView(this, R.layout.activity_chat);
 
         setSupportActionBar(binding.chatToolbar);
-
-        me = new User(0, "Manager", BitmapFactory.decodeResource(getResources(), R.drawable.face_1));
-        you = new User(1, "Operator", BitmapFactory.decodeResource(getResources(), R.drawable.face_2));
 
         binding.chatView.setOnClickSendButtonListener(new View.OnClickListener() {
             @Override
@@ -55,18 +53,44 @@ public class ChatActivity
 
         Intent intent = getIntent();
 
-        String userJid = intent.getStringExtra(EXTRA_USER_ID);
-        String userName = intent.getStringExtra(EXTRA_USER_NAME);
+        if (intent.getSerializableExtra(EXTRA_CONTACT_ROSTER_ENTRY) instanceof RosterEntryDecorator) {
+            contactRosterEntry = (RosterEntryDecorator) intent.getSerializableExtra(EXTRA_CONTACT_ROSTER_ENTRY);
+        }
 
-        getSupportActionBar().setTitle(userName);
 
-        chatPresenter.getChatWithUser(userJid);
+        getSupportActionBar().setTitle(contactRosterEntry.getName());
+
+        chatPresenter.loadHistory(contactRosterEntry);
+        chatPresenter.getChatWithUser(contactRosterEntry);
     }
 
     @Override
-    public void showSendingMessage(String message) {
+    public void showHistory(List<MessageDB> messages, User user, User contact) {
+        for (MessageDB message : messages) {
+            if (message.isIncoming() == true) {
+                Message incomingMessage = new Message.Builder()
+                        .setUser(contact)
+                        .setRightMessage(false)
+                        .setMessageText(message.getMessageText())
+                        .build();
+
+                binding.chatView.send(incomingMessage);
+            } else {
+                Message sendMessage = new Message.Builder()
+                        .setUser(user)
+                        .setRightMessage(true)
+                        .setMessageText(message.getMessageText())
+                        .build();
+
+                binding.chatView.send(sendMessage);
+            }
+        }
+    }
+
+    @Override
+    public void showSendingMessage(User user, String message) {
         Message sendMessage = new Message.Builder()
-                .setUser(me)
+                .setUser(user)
                 .setRightMessage(true)
                 .setMessageText(message)
                 .build();
@@ -75,9 +99,9 @@ public class ChatActivity
     }
 
     @Override
-    public void showIncomingMessage(String message) {
+    public void showIncomingMessage(User contact, String message) {
         Message incomingMessage = new Message.Builder()
-                .setUser(you)
+                .setUser(contact)
                 .setRightMessage(false)
                 .setMessageText(message)
                 .build();

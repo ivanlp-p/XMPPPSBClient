@@ -43,7 +43,7 @@ public class RosterGroupDecorator implements Parent<RosterEntryDecorator> {
         List<RosterEntryDecorator> userOfflineList = new ArrayList<>();
 
         for (int i = 0; i < rosterEntries.size(); i++) {
-            userOfflineList.add(new RosterEntryDecorator(i, rosterEntries.get(i).getUser(), rosterEntries.get(i).getName(), new ArrayList<String>()));
+            userOfflineList.add(new RosterEntryDecorator(i+1, rosterEntries.get(i).getUser(), rosterEntries.get(i).getName(), new ArrayList<String>()));
         }
 
         rosterEntriesListString = serializeHelper.serializeWithGson(userOfflineList);

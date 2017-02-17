@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.example.ivan.xmpppsbclient.R;
 import com.example.ivan.xmpppsbclient.chat.view.ChatActivity;
 import com.example.ivan.xmpppsbclient.databinding.ActivityMainBinding;
+import com.example.ivan.xmpppsbclient.enrities.RosterEntryDecorator;
 import com.example.ivan.xmpppsbclient.enrities.RosterGroupDecorator;
 import com.example.ivan.xmpppsbclient.userslist.presenter.MainPresenterImpl;
 
@@ -24,8 +25,7 @@ public class MainActivity
 
     private static final String TAG = "MainActivity";
     private static final String IS_FIRST_LOGGIN = "is_first_loggin";
-    private static final String EXTRA_USER_ID = "extra_user_id";
-    private static final String EXTRA_USER_NAME = "extra_user_name";
+    private static final String EXTRA_CONTACT_ROSTER_ENTRY = "extra_contact_roster_entry";
 
     private ActivityMainBinding binding;
     private UserListAdapter adapter;
@@ -60,10 +60,9 @@ public class MainActivity
     }
 
     @Override
-    public void showChatWithUser(String userJid, String userName) {
+    public void showChatWithUser(RosterEntryDecorator contactRosterEntry) {
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra(EXTRA_USER_ID, userJid);
-        intent.putExtra(EXTRA_USER_NAME, userName);
+        intent.putExtra(EXTRA_CONTACT_ROSTER_ENTRY, contactRosterEntry);
         startActivity(intent);
     }
 
@@ -73,8 +72,8 @@ public class MainActivity
     }
 
     @Override
-    public void onItemClickListener(String userJid, String userName) {
-        mainPresenter.getChatWithUser(userJid, userName);
+    public void onItemClickListener(RosterEntryDecorator contactRosterEntry) {
+        mainPresenter.getChatWithUser(contactRosterEntry);
     }
 
     @Override

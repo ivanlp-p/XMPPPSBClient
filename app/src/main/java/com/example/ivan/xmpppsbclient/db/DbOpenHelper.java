@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.ivan.xmpppsbclient.chat.db.MessagesTable;
 import com.example.ivan.xmpppsbclient.userslist.db.UsersListTable;
 
 /**
@@ -22,6 +23,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(UsersListTable.createTableQuery());
+        db.execSQL(MessagesTable.createTableQuery());
     }
 
     @Override

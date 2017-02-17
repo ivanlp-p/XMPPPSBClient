@@ -3,6 +3,7 @@ package com.example.ivan.xmpppsbclient.userslist.view;
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
+import com.example.ivan.xmpppsbclient.enrities.RosterEntryDecorator;
 import com.example.ivan.xmpppsbclient.enrities.RosterGroupDecorator;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface MainView extends MvpView {
     void showUserList(List<RosterGroupDecorator> rosterGroups);
 
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void showChatWithUser(String userJid, String userName);
+    void showChatWithUser(RosterEntryDecorator contactRosterEntry);
 
     void updateUsersListWhenProcessNewChat(String userJid);
 }

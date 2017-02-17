@@ -9,13 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp">
+        android:layout_marginRight="16dp">
 
         <TextView
             android:id="@+id/card_tv_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/rounded_textview"
             android:gravity="center"
             android:textSize="30sp"
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="34dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
             android:background="@drawable/circle_textview_online"/>
 
         <TextView
@@ -48,6 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="4dp"
+            android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/card_tv_image"
             android:layout_toLeftOf="@id/card_new_msg">
 

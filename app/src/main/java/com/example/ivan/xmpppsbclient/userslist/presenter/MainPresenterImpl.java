@@ -121,9 +121,9 @@ public class MainPresenterImpl extends MvpPresenter<MainView> {
         });*/
     }
 
-    public void getChatWithUser(String userJid, String userName) {
+    public void getChatWithUser(RosterEntryDecorator contactRosterEntry) {
 
-        getViewState().showChatWithUser(userJid, userName);
+        getViewState().showChatWithUser(contactRosterEntry);
     }
 
     public void getOfflineMessages() {

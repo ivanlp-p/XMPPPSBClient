@@ -11,7 +11,11 @@ import com.example.ivan.xmpppsbclient.userslist.db.StorIOForUsersGroup;
 import com.example.ivan.xmpppsbclient.utils.SharedPreferencesHelper;
 import com.example.ivan.xmpppsbclient.xmpp.OpenfireConnection;
 
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.roster.RosterGroup;
+import org.jivesoftware.smackx.vcardtemp.VCardManager;
+import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 
 import java.util.List;
 
@@ -64,6 +68,18 @@ public class LoginPresenterImpl extends MvpPresenter<LoginView> {
             if (connection.connectToOpenfire(username, password)) {
                 prefsHelper.setLogin(username);
                 prefsHelper.setPassword(password);
+
+                VCardManager vCardManager = connection.getVCardManager();
+                try {
+                    VCard userVCard = vCardManager.loadVCard();
+                    prefsHelper.setUsername(userVCard.getNickName());
+                } catch (SmackException.NoResponseException e) {
+                    e.printStackTrace();
+                } catch (XMPPException.XMPPErrorException e) {
+                    e.printStackTrace();
+                } catch (SmackException.NotConnectedException e) {
+                    e.printStackTrace();
+                }
 
                 List<RosterGroup> rosterGroups = connection.getUsersGroup();
 
